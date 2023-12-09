@@ -1,7 +1,7 @@
 import os
 from flask import Flask,jsonify,request,render_template,flash,redirect,url_for
 from flask_mysqldb import MySQL
-from users import create_user,get_users,get_user,update_user,delete_user
+from users import create_user,authenticate_user
 from database import set_mysql
 from dotenv import load_dotenv
 
@@ -27,26 +27,39 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "your_secret_key_here")
 app.template_folder = "template"
 app.static_folder = "static"
 @app.route("/")
-
-@app.route("/login")
-def login():
+def home():
     return render_template("login.html")
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    username = request.form.get("username")
+    password = request.form.get("pass")
+
+    user = authenticate_user(username, password)
+
+    if user:
+        return redirect(url_for("dashboard"))
+       
+    else:
+       flash("Invalid username or password. Please try again.", "error")
+       return render_template("login.html")
+
+    
 
 @app.route("/signup", methods=["POST"])
 def signup():
-    name = request.form.get("hello")
+    name = request.form.get("name")
     age = request.form.get("age")
     email = request.form.get("email")
     password = request.form.get("password")
 
        
     user_id = create_user(name, age, email, password)
-    
     return redirect(url_for("login"))
 
-
-
- 
+@app.route("/dashboard")
+def dashboard():
+    return "<p>Hello, World!</p>"
 
 
 

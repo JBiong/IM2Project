@@ -51,13 +51,13 @@
 
                         <div class="input-box">
                             <span class="icon"><i class='bx bxs-envelope'></i></span>
-                            <input type="text" required>
+                            <input type="text" name="username" required>
                             <label>Email</label>
                         </div>
 
                         <div class="input-box">
                             <span class="icon"><i class='bx bxs-lock-alt'></i></span>
-                            <input type="password" required>
+                            <input type="password" name="pass" required>
                             <label>Password</label>
                         </div>
 
@@ -66,7 +66,18 @@
                             Remember me</label>
                             <a href="#">Forgot password?</a>
                         </div>
-
+                        
+                        <div class="plash">
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    <ul class="flashes">
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                {% endwith %}
+                        </div>
                         <button type="submit" class="btn">Sign In</button>
 
                         <div class="login-register">
@@ -84,7 +95,7 @@
 
                         <div class="input-box">
                             <span class="icon"><i class='bx bxs-user'></i></span>
-                            <input type="text" name="hello" required>
+                            <input type="text" name="name" required>
                             <label>Name</label>
                         </div>
 

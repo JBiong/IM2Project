@@ -220,7 +220,7 @@ body {
     background: transparent;
     border: none;
     outline: none;
-    font-size: 15px;
+    font-size: 13px;
     color: #e4e4e4;
     font-weight: 500;
     padding-right: 28px;
@@ -336,4 +336,11 @@ body {
  .login-register p a:hover {
     text-decoration: underline;
     
+ }
+
+ .plash {
+    font-size: 10px;
+    padding:5px;
+    align-items: center;
+    justify-content: center;
  }
