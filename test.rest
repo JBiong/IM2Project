@@ -1,0 +1,35 @@
+@host=http://127.0.0.1:5000
+
+### Create a product
+POST {{host}}/products
+Content-Type: application/json
+
+{
+  "category": "Dress",
+  "name": "Celestial Charm Dress",
+  "price": 80.00,
+  "image_name": "dress1.png"
+}
+
+### Read all products
+GET {{host}}/products
+Content-Type: application/json
+
+### Read single product by id
+GET {{host}}/products/1
+Content-Type: application/json
+
+### Update a product
+PUT {{host}}/products/1
+Content-Type: application/json
+
+{
+  "category": "Dress",
+  "name": "Updated Celestial Charm Dress",
+  "price": 90.00,
+  "image_name": "updated_dress1.png"
+}
+
+### Delete a product
+DELETE {{host}}/products/1
+Content-Type: application/json
