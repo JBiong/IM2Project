@@ -1,12 +1,14 @@
 import os
 from flask import Flask,jsonify,request,render_template,flash,redirect,url_for
 from flask_mysqldb import MySQL
-from users import create_user,authenticate_user
+from users import create_user,authenticate_user,get_users
 from database import set_mysql
 from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
+
+
 
 # Required
 app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
@@ -26,40 +28,52 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "your_secret_key_here")
 
 app.template_folder = "template"
 app.static_folder = "static"
+
 @app.route("/")
 def home():
+     return render_template("login.html")
+
+@app.route("/login", methods=["POST"])
+def login():
+    if request.method == "POST":
+        data = request.get_json()
+        user = authenticate_user(data["email"], data["pass"])
+
+        if user is not None:
+            # Authentication successful
+             response_data = {"id": user, "redirect_url": url_for('dashboard')}
+             return jsonify(response_data), 200
+        else:
+            # Authentication failed
+            return jsonify({"error": "Authentication failed"}), 401
+
+    else:
+        users = get_users()
+        return jsonify(users)
+
+@app.route("/signup", methods=["GET","POST"])
+def signup():
+    if request.method == "POST":
+        data = request.get_json()
+        user_id = create_user(data["name"], data["age"], data["email"], data["password"])
+        return jsonify({"id": user_id})
+    else:
+        users = get_users()
+        return jsonify(users)
+
     return render_template("login.html")
 
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    username = request.form.get("username")
-    password = request.form.get("pass")
-
-    user = authenticate_user(username, password)
-
-    if user:
-        return redirect(url_for("dashboard"))
-       
-    else:
-       flash("Invalid username or password. Please try again.", "error")
-       return render_template("login.html")
-
+@app.route("/signup/<int:id>", methods=["GET"])
+def user(id):
+        user = get_users(id)
+        return jsonify(user)
     
-
-@app.route("/signup", methods=["POST"])
-def signup():
-    name = request.form.get("name")
-    age = request.form.get("age")
-    email = request.form.get("email")
-    password = request.form.get("password")
-
-       
-    user_id = create_user(name, age, email, password)
-    return redirect(url_for("login"))
 
 @app.route("/dashboard")
 def dashboard():
-    return "<p>Hello, World!</p>"
+    return render_template("dashboard.html")
+
+
 
 
 

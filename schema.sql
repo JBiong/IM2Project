@@ -72,3 +72,26 @@ END$$
 DELIMITER ;
 
 
+CREATE TABLE `products` (
+   `product_id` INT PRIMARY KEY AUTO_INCREMENT,
+   `product_name` VARCHAR(255) NOT NULL,
+   `qty` INT,
+   `size` VARCHAR(50),
+   `price` DECIMAL(10, 2)
+)ENGINE=InnoDB;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE create_product(
+    IN p_product_name VARCHAR(255),
+    IN p_qty INT,
+    IN p_size VARCHAR(50),
+    IN p_price DECIMAL(10, 2)
+)
+BEGIN
+    INSERT INTO Product (product_name, qty, size, price)
+    VALUES (p_product_name, p_qty, p_size, p_price);
+END $$
+
+DELIMITER ;
