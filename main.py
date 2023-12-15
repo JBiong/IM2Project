@@ -1,7 +1,9 @@
 import os
 from flask import Flask,jsonify,request,render_template,flash,redirect,url_for
 from flask_mysqldb import MySQL
-from users import create_user,authenticate_user,get_users
+from flask_sqlalchemy import SQLAlchemy
+from users import create_user,authenticate_user,get_users,get_user
+from orders import get_all_products,create_order
 from database import set_mysql
 from dotenv import load_dotenv
 
@@ -25,9 +27,9 @@ set_mysql(mysql)
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "your_secret_key_here")
 
-
 app.template_folder = "template"
 app.static_folder = "static"
+
 
 @app.route("/")
 def home():
@@ -65,7 +67,7 @@ def signup():
 
 @app.route("/signup/<int:id>", methods=["GET"])
 def user(id):
-        user = get_users(id)
+        user = get_user(id)
         return jsonify(user)
     
 
@@ -73,7 +75,43 @@ def user(id):
 def dashboard():
     return render_template("dashboard.html")
 
+@app.route('/products')
+def get_products():
+    products = get_all_products()
 
+    product_list = [
+        {
+            'id': product['id'],
+            'category': product['category'],
+            'name': product['product_name'],
+            'stock': product['product_stock'],
+            'price': float(product['price']),
+            'image_name': product['image_name']
+        }
+        for product in products
+    ]
 
+    if request.headers.get('Content-Type') == 'application/json':
+        return jsonify(products=product_list)
+    else:
+        return render_template("index.html", products=product_list)
 
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    try:
+        data = request.get_json()
+        product_id = data.get('product_id')
+        quantity = data.get('quantity')
+        size = data.get('size')
 
+      
+        if product_id is not None and quantity is not None and size is not None:
+            # Call your create_order function here
+            order_id = create_order(product_id, quantity, size)
+            print("ID:",order_id)
+            return jsonify({'status': 'success', "order_id": order_id})
+        else:
+            return jsonify({'status': 'error', 'message': 'Invalid data format'})
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500

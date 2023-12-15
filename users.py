@@ -31,7 +31,7 @@ def get_user_by_email(username):
     result = fetchone(query, params)
     return result
 
-def get_users(id):
+def get_user(id):
     query = "SELECT * FROM get_users WHERE id = %s"
     params = (id,)
     result = fetchone(query, params)

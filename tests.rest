@@ -27,8 +27,42 @@ Content-Type: application/json
     "pass":"123456"  
 }
 
-
 ###Read single item by id
 GET {{host}}/signup/1
 Content-Type: application/json
 
+
+### Read all products 
+GET {{host}}/products 
+Content-Type: application/json
+
+### Add to Cart
+
+POST {{host}}/add_to_cart
+Content-Type: application/json
+
+{
+    "product_id": "'7'",
+    "quantity": 3,
+    "size":"XL"
+}
+
+
+### Edit Cart
+
+GET {{host}}/edit_cart
+Content-Type: application/json
+
+# This is a placeholder. In practice, you would want to extract the cart item IDs dynamically from your application.
+
+### Delete a Cart Item
+
+POST {{host}}/edit_cart
+Content-Type: application/x-www-form-urlencoded
+
+delete_item_id=2
+
+### View Cart
+
+GET {{host}}/orderlist
+Content-Type: application/json

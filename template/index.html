@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping App</title>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .shopping-label {
+            font-size: 50px;
+        }
+
+        .products-label {
+            font-weight: lighter;
+            font-size: 20px;
+            margin-top: -10px;
+        }
+
+        nav {
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        nav a:hover {
+            color: #ff0000;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        form>div {
+            width: 30%;
+            margin: 10px;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+    #popup-form {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    /* Style for the overlay background */
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    </style>
+</head>
+
+<body>
+    <h1 class="shopping-label">AMLSHOP</h1>
+    <h1 class="products-label">P R O D U C T S</h1>
+    <button onclick="togglePopup()">TO ORDER</button>
+
+    <div id="overlay"></div>
+  <div id="popup-form">
+    <!-- Your form content goes here -->
+  
+    <h2>Order Form</h2>
+    <form id="orderForm">
+      <!-- Add your form fields here -->
+      <label for="product_id">Product ID:</label>
+      <input type="text" id="product_id" name="product_id" required>
+      <br>
+      <label for="size">Size:</label>
+      <select id="size" name="size" required>
+        <option value="XSmall">XSmall</option>
+        <option value="Small">Small</option>
+        <option value="Medium">Medium</option>
+        <option value="Large">Large</option>
+        <option value="XLarge">XLarge</option>
+      </select>
+      <br>
+      <label for="quantity">quantity:</label>
+      <input type="text" id="quantity" name="quantity" required>
+      <br>
+      <input type="submit" value="Submit" onclick="return submitOrderForm()">
+    </form>
+    <!-- Close button for the pop-up form -->
+    <button onclick="togglePopup()">Close</button>
+
+  </div>
+    
+
+    <div class="category">
+        <form action="dashboard" method="post" class="cart-form">
+            {% for product in products %}
+            <div>
+                <input type="hidden" name="product_id_{{ product.id }}" value="PRODUCT ID: {{ product.id }}">
+                <img src="{{ url_for('static', filename=product.image_name) }}" alt="{{ product.name }}">
+                <h5>PRODUCT ID: {{ product.id }}</h5>
+                <p>{{ product.name }}</p>
+                <p>Available Stock: {{ product.stock }}</p>
+                <p>Price: ${{ product.price }}</p>
+                <select name="size_{{ product.id }}">
+                    <option value="">Available Size</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+    <script>
+        function togglePopup() {
+          var popup = document.getElementById('popup-form');
+          var overlay = document.getElementById('overlay');
+          popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+          overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function submitOrderForm() {
+        var product_id = document.getElementById("product_id").value;
+        var quantity = document.getElementById("quantity").value;
+        var size = document.getElementById("size").value;
+  
+      
+        var formData = {
+            product_id: product_id,
+            quantity: quantity,
+            size: size,
+        };
+
+        fetch('/add_to_cart', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+})
+    .then(response => response.json())
+    .then(data => {
+        if (data.id) {
+            console.log('Success, Order ID:', data.id);
+
+            // Clear input fields if needed
+            document.getElementById("product_id").value = '';
+            document.getElementById("quantity").value = '';
+            document.getElementById("size").value = '';
+        } else {
+            console.error('Error: Unexpected response format');
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+      </script>
+
+</body>
+
+</html>
