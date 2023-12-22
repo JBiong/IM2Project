@@ -1,6 +1,25 @@
-CREATE SCHEMA `shoppingapp` ;
 
-CREATE TABLE `shoppingapp`.`products` (
+CREATE SCHEMA `amlshop` ;
+
+-- TABLES
+
+CREATE TABLE `persons` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `age` int NOT NULL,
+  `email` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `person_id` int NOT NULL,
+  `username` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `products` (
   `id` INT NOT NULL,
   `product_name` VARCHAR(45) NOT NULL,
   `price` DECIMAL(10,2) NOT NULL,
@@ -8,7 +27,7 @@ CREATE TABLE `shoppingapp`.`products` (
   `image_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`));
 
-CREATE TABLE `shoppingapp`.`cart_items` (
+CREATE TABLE `cart_items` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT NULL,
   `size` VARCHAR(45) NULL,
@@ -17,9 +36,19 @@ CREATE TABLE `shoppingapp`.`cart_items` (
   INDEX `product_id_idx` (`product_id` ASC) VISIBLE,
   CONSTRAINT `product_id`
     FOREIGN KEY (`product_id`)
-    REFERENCES `shoppingapp`.`products` (`id`)
+    REFERENCES `amlshop`.`products` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+CREATE TABLE orders (
+  id int NOT NULL AUTO_INCREMENT,
+  product_id int NOT NULL,
+  size varchar(45) NOT NULL,
+  quantity int NOT NULL,
+  PRIMARY KEY (id),
+  KEY product_id (product_id),
+  CONSTRAINT orders_ibfk_1 FOREIGN KEY (product_id) REFERENCES products (id)
+) ENGINE=InnoDB;
 
 INSERT INTO products (id, category, product_name, price, image_name)
 VALUES 
@@ -54,6 +83,54 @@ VALUES
   (29, 'Jackets', 'Urban Utopia', 280.00, 'jacket5.png'),
   (30, 'Jackets', 'Brooklyn New York', 300.00, 'jacket6.png');
 
+--VIEWS
+
+
+CREATE VIEW get_users AS 
+SELECT
+p.name,
+p.age,
+p.email,
+u.id,
+u.username,
+u.password
+FROM persons p
+INNER JOIN users u ON u.person_id = p.id;
+
+CREATE VIEW view_cart AS
+SELECT
+    cart_items.id,
+    cart_items.product_id,
+    cart_items.size,
+    cart_items.quantity,
+    products.product_name,
+    products.price,
+    products.image_name
+FROM cart_items
+JOIN products ON cart_items.product_id = products.id;
+
+
+--STORED PROCEDURES
+
+
+DELIMITER $$
+CREATE PROCEDURE create_user(
+    IN p_name VARCHAR(200),
+    IN p_age INT,
+    IN p_email VARCHAR(200),
+    IN p_username VARCHAR(200),
+    IN p_password VARCHAR(200)
+)
+BEGIN
+DECLARE v_person_id int;
+INSERT INTO persons(name,age,email) VALUES (p_name,p_age, p_email);
+SET v_person_id = LAST_INSERT_ID();
+INSERT INTO users(person_id,username,password) VALUES (v_person_id,p_username,p_password);
+SELECT LAST_INSERT_ID() AS id;
+END$$
+DELIMITER;
+
+
 DELIMITER $$
 CREATE PROCEDURE create_order(
   IN p_product_name varchar(200),
@@ -77,6 +154,7 @@ BEGIN
   SELECT LAST_INSERT_ID() AS id;
 END$$
 DELIMITER ;
+
 
 DELIMITER $$
 CREATE PROCEDURE update_order(
@@ -104,6 +182,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+
 DELIMITER $$
 CREATE PROCEDURE delete_order(IN order_id int)
 BEGIN
@@ -116,4 +195,60 @@ BEGIN
   
   SELECT order_id AS id;
 END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE add_to_cart(IN product_id INT, IN size VARCHAR(45), IN quantity INT)
+BEGIN
+    INSERT INTO cart_items (product_id, size, quantity) VALUES (product_id, size, quantity);
+    INSERT INTO orders (product_id, size, quantity) VALUES (product_id, size, quantity);
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE edit_cart(IN item_id INT, IN new_quantity INT, IN new_size VARCHAR(45))
+BEGIN
+    -- Update quantity
+    UPDATE cart_items SET quantity = new_quantity WHERE id = item_id;
+    UPDATE orders SET quantity = new_quantity WHERE id = item_id;
+
+    -- Update size
+    UPDATE cart_items SET size = new_size WHERE id = item_id;
+    UPDATE orders SET size = new_size WHERE id = item_id;
+END $$
+DELIMITER ;
+
+CREATE PROCEDURE `delete_cart_item`(IN item_id INT)
+BEGIN
+    DELETE FROM cart_items WHERE id = item_id;
+    DELETE FROM orders WHERE id = item_id;
+END;
+
+
+--TRIGGERS
+DELIMITER $$
+
+CREATE TRIGGER before_update_cart_items
+BEFORE UPDATE ON amlshop.cart_items
+FOR EACH ROW
+BEGIN
+    DECLARE v_product_id INT;
+    DECLARE v_threshold_quantity INT;
+
+    -- Set the threshold quantity (change as needed)
+    SET v_threshold_quantity = 10;
+
+    -- Get the product_id corresponding to the updated cart_item
+    SELECT product_id INTO v_product_id FROM amlshop.cart_items WHERE id = NEW.id;
+
+    -- Check if the updated quantity exceeds the threshold
+    IF (NEW.quantity >= v_threshold_quantity) THEN
+        -- Your custom logic or actions here (e.g., send notification, update another table, etc.)
+        -- For example, you can print a message to the console
+        SET NEW.quantity = v_threshold_quantity; -- Optionally, set the quantity to the threshold value
+    END IF;
+END $$
+
 DELIMITER ;
