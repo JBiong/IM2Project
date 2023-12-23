@@ -3,7 +3,7 @@
 GET {{host}}/
 
 ###Create an item
-POST {{host}}/users
+POST {{host}}/signup
 Content-Type: application/json
 
 {
@@ -15,24 +15,90 @@ Content-Type: application/json
 }
 
 ###Read all items
-GET {{host}}/users
+GET {{host}}/signup
 Content-Type: application/json
 
-###Read single item by id
-GET {{host}}/users/7
-Content-Type: application/json
-
-###Update an item
-PUT {{host}}/users/7
+###Aauthenticate user
+POST {{host}}/login
 Content-Type: application/json
 
 {
-    "name":"John Doe",
-    "age":35,
-    "email":"Joe.doe@gmail.com",
-    "password":"abc123"
+    "email":"john@doe.com",
+    "pass":"123456"  
 }
 
-###Delete an item
-DELETE {{host}}/users/8
-Content-Type: "application/json"
+###Read single item by id
+GET {{host}}/signup/1
+Content-Type: application/json
+
+# ### Create a product
+POST {{host}}/products
+Content-Type: application/json
+
+{
+    "category": "Dress",
+    "name": "Celestial Charm Dress",
+    "price": 80.00,
+    "image_name": "dress1.png"
+}
+
+### Read all products
+GET {{host}}/products
+Content-Type: application/json
+
+
+### Read single product by id
+GET {{host}}/products/1
+Content-Type: application/json
+
+### Update a product
+PUT {{host}}/products/1
+Content-Type: application/json
+
+{
+    "category": "Dress",
+    "name": "Celestial Charm Dress",
+    "price": 90.00,
+    "image_name": "updated_dress1.png"
+}
+
+### Delete a product
+DELETE {{host}}/products/1
+Content-Type: application/json
+
+
+### Add to Cart
+# Add products to the cart
+POST {{host}}/add_to_cart_item
+Content-Type: application/json
+
+{
+    "items": [
+        {"product_id": 15, "size": "M", "quantity": 2}
+    ]
+}
+
+### Edit a Cart Items
+POST {{host}}/edit_cart_item
+Content-Type: application/json
+
+{
+    "items": [
+        {"item_id": 49, "quantity": 5, "size": "XL"},
+        {"item_id": 47, "quantity": 2, "size": "L"}
+    ]
+}
+
+### Delete a Cart Item
+POST {{host}}/edit_cart_item
+Content-Type: application/json
+
+{
+    "items": [
+        {"item_id": 47, "delete": true}
+    ]
+}
+
+### View Cart
+GET {{host}}/view_cart
+Content-Type: application/json

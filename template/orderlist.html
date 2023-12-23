@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f7f7e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #8B4513;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 80%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            flex-basis: calc(50% - 20px);
+            box-sizing: border-box;
+            margin: 10px;
+            color: #8B4513;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: #8B4513;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .empty-cart {
+            color: #777;
+        }
+        div, a{
+            background-color: #8B4513;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            cursor: pointer;
+            width: 44%;
+            text-align: center;
+            margin-bottom: 10px;
+            
+        }
+    </style>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+
+        {% if orders %}
+        <ul>
+            {% for order in orders %}
+                <li>
+                    <h3>{{ order.quantity }}x {{ order.product_name }} </h3>
+                    <h3>(Size: {{ order.size }})</h3>
+                    <h3>Price: ${{ order.price}}</h3>
+                    <h3>Total Amount = ${{ order.price * order.quantity }}</h3>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Display the total amount after the orders -->
+        <p>Total Amount for all items: ${{ total_amount }}</p>
+    {% else %}
+        <p class="empty-cart">Your cart is empty.</p>
+    {% endif %}
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; background-color: #f7f7e6; align-items: center;">
+    <a href="{{ url_for('get_all_products') }}">Continue Shopping</a>
+    <a href="{{ url_for('edit_cart_route') }}" style="background-color: #ffd4ac; color: black;">Edit Cart</a>
+    </div>
+</body>
+</html>

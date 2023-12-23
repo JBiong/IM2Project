@@ -27,7 +27,8 @@ body {
 .navbar a {
     position: relative;
     font-size: 16px;
-    color: #e4e4e4;
+    /* color: #e4e4e4; */
+    color: #020410;
     text-decoration: none;
     font-weight: 500;
     margin-right: 30px;
@@ -56,7 +57,8 @@ body {
     width: 250px;
     height: 45px;
     background: transparent;
-    border: 2px solid #e4e4e4;
+    /* border: 2px solid #e4e4e4; */
+    border: 2px solid #020410;
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -68,12 +70,14 @@ body {
     border: none;
     outline: none;
     font-size: 16px;
-    color:#e4e4e4;
+    /* color:#e4e4e4; */
+    color: #020410;
     padding-left: 10px;
 }
 
 .search-bar input::placeholder {
-    color: #e4e4e4;
+    /* color: #e4e4e4; */
+    color: #020410;
 }
 
 .search-bar button {
@@ -90,14 +94,16 @@ body {
 
 .search-bar button i{
     font-size: 22px;
-    color: #e4e4e4;
+    /* color: #e4e4e4; */
+    color: #020410;
 
 }
 
 .background {
     width: 100%;
     height: 100vh;
-    background: url('background.jpg') no-repeat;
+    background: url('background.png') no-repeat;
+    /* background: #B5916B; */
     background-size: cover;
     background-position: center;
     filter: blur(10px);
@@ -110,9 +116,11 @@ body {
     transform: translate(-50%,-50%);
     width: 75%;
     height: 450px;
-    background: url('background.jpg') no-repeat;
+    background: url('background.png') no-repeat;
+    /* background: #B5916B; */
     background-size: cover;
     background-position: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .container .content {
@@ -130,26 +138,33 @@ body {
 }
 
 .content .logo {
-    font-size: 20px;
+    font-size: 25px;
+    color: #020410;
+    text-shadow: 2px 2px 4px rgba(247, 244, 244, 0.7); 
 }
 
 .text-sci h2 {
-    font-size: 30px;
+    font-size: 32px;
     line-height: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); 
 }
+
 
 .text-sci h2 span {
     font-size: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .text-sci p {
     font-size: 16px;
     margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .social-icons a i {
     font-size: 22px;
     color: #e4e4e4;
+    /* color: #020410; */
     margin-right: 10px;
     transition: .5s ease;
 }
@@ -180,7 +195,8 @@ body {
     backdrop-filter: blur(20px);
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    color: #e4e4e4;
+    /* color: #e4e4e4; */
+    color: #020410;
 }
 
 .logreg-box .form-box.login {
@@ -190,12 +206,12 @@ body {
 }
 
 .logreg-box.active .form-box.login {
-    transform: translateX(430px);
+    transform: translateX(100%);
     transition-delay: 0s;
 }
 
 .logreg-box .form-box.register {
-    transform: translateX(430px);
+    transform: translateX(100%);
     transition: transform .6s ease;
     transition-delay: 0s;
 }
@@ -221,7 +237,8 @@ body {
     border: none;
     outline: none;
     font-size: 13px;
-    color: #e4e4e4;
+    /* color: #e4e4e4; */
+    color: #020410;
     font-weight: 500;
     padding-right: 28px;
  }
@@ -229,7 +246,8 @@ body {
     position: relative;
     width: 340px;
     height: 30px;
-    border-bottom: 2px solid #e4e4e4;
+    /* border-bottom: 2px solid #e4e4e4; */
+    border-bottom: 2px solid #020410;
     margin: 30px 0;
  }
 
@@ -246,7 +264,8 @@ body {
     position: relative;
     width: 340px;
     height: 50px;
-    border-bottom: 2px solid #e4e4e4;
+    /* border-bottom: 2px solid #e4e4e4; */
+    border-bottom: 2px solid #020410;
     margin: 30px 0;
  }
 
@@ -257,7 +276,8 @@ body {
     border: none;
     outline: none;
     font-size: 16px;
-    color: #e4e4e4;
+    /* color: #e4e4e4; */
+    color: #020410;
     font-weight: 500;
     padding-right: 28px;
  }
@@ -294,12 +314,13 @@ body {
  }
 
  .remember-forgot label input {
-    accent-color: #e4e4e4;
+    /* accent-color: #e4e4e4; */
+    accent-color: #020202;
     margin-right: 3px;
  }
 
  .remember-forgot a{
-    color: #e4e4e4;
+    color: #020202;
     text-decoration: none;
  }
 
@@ -310,7 +331,7 @@ body {
  .btn {
     width: 100%;
     height: 45px;
-    background: #c4103d;
+    background: #020202;
     border: none;
     outline: none;
     border-radius: 4px;
@@ -328,7 +349,7 @@ body {
  }
 
  .login-register p a {
-    color: #e4e4e4;
+    color: #020202;
     font-weight: 600;
     text-decoration: none;
  }
@@ -338,9 +359,4 @@ body {
     
  }
 
- .plash {
-    font-size: 10px;
-    padding:5px;
-    align-items: center;
-    justify-content: center;
- }
+ 
