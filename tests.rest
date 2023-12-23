@@ -31,38 +31,74 @@ Content-Type: application/json
 GET {{host}}/signup/1
 Content-Type: application/json
 
-
-### Read all products 
-GET {{host}}/products 
-Content-Type: application/json
-
-### Add to Cart
-
-POST {{host}}/add_to_cart
+# ### Create a product
+POST {{host}}/products
 Content-Type: application/json
 
 {
-    "product_id": "'7'",
-    "quantity": 3,
-    "size":"XL"
+    "category": "Dress",
+    "name": "Celestial Charm Dress",
+    "price": 80.00,
+    "image_name": "dress1.png"
 }
 
-
-### Edit Cart
-
-GET {{host}}/edit_cart
+### Read all products
+GET {{host}}/products
 Content-Type: application/json
 
-# This is a placeholder. In practice, you would want to extract the cart item IDs dynamically from your application.
+
+### Read single product by id
+GET {{host}}/products/1
+Content-Type: application/json
+
+### Update a product
+PUT {{host}}/products/1
+Content-Type: application/json
+
+{
+    "category": "Dress",
+    "name": "Celestial Charm Dress",
+    "price": 90.00,
+    "image_name": "updated_dress1.png"
+}
+
+### Delete a product
+DELETE {{host}}/products/1
+Content-Type: application/json
+
+
+### Add to Cart
+# Add products to the cart
+POST {{host}}/add_to_cart_item
+Content-Type: application/json
+
+{
+    "items": [
+        {"product_id": 15, "size": "M", "quantity": 2}
+    ]
+}
+
+### Edit a Cart Items
+POST {{host}}/edit_cart_item
+Content-Type: application/json
+
+{
+    "items": [
+        {"item_id": 49, "quantity": 5, "size": "XL"},
+        {"item_id": 47, "quantity": 2, "size": "L"}
+    ]
+}
 
 ### Delete a Cart Item
+POST {{host}}/edit_cart_item
+Content-Type: application/json
 
-POST {{host}}/edit_cart
-Content-Type: application/x-www-form-urlencoded
-
-delete_item_id=2
+{
+    "items": [
+        {"item_id": 47, "delete": true}
+    ]
+}
 
 ### View Cart
-
-GET {{host}}/orderlist
+GET {{host}}/view_cart
 Content-Type: application/json

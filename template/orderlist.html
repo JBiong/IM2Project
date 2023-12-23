@@ -69,7 +69,7 @@
 <body>
     <h1>Shopping Cart</h1>
 
-    {% if orders %}
+        {% if orders %}
         <ul>
             {% for order in orders %}
                 <li>
@@ -80,13 +80,16 @@
                 </li>
             {% endfor %}
         </ul>
+
+        <!-- Display the total amount after the orders -->
+        <p>Total Amount for all items: ${{ total_amount }}</p>
     {% else %}
         <p class="empty-cart">Your cart is empty.</p>
     {% endif %}
 
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; background-color: #f7f7e6;">
-    <a href="{{ url_for('index') }}">Continue Shopping</a>
-    <a href="{{ url_for('edit_cart') }}" style="background-color: #ffd4ac; color: black;">Edit Cart</a>
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; background-color: #f7f7e6; align-items: center;">
+    <a href="{{ url_for('get_all_products') }}">Continue Shopping</a>
+    <a href="{{ url_for('edit_cart_route') }}" style="background-color: #ffd4ac; color: black;">Edit Cart</a>
     </div>
 </body>
 </html>
